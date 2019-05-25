@@ -12,7 +12,7 @@
 
     <style>
       body {
-        background-color: black
+        background-color: rgb(141, 141, 141);
       }
 
       #headercol {
@@ -20,8 +20,21 @@
       }
 
       img {
-        max-width: 200px;
-        margin: 5px;
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        max-width: 200px !important;
+        max-height: 200px !important;
+      }
+      
+      .grid-container {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: auto auto auto auto auto auto auto;
+      }
+      
+      .grid-item {
+        max-width: 200px !important;
+        max-height: 200px !important;
+        text-align: center;
       }
     </style>
     <title>Hello, world!</title>
@@ -38,10 +51,7 @@
       </div>
     </div>
     <div class="container.fluid overflow-hidden">
-      <div class="row p-2 align-items-top">
-        <div class="col-sm bg-dark text-white" id="canvas">
-          <img src="..\..\Users\knerl\OneDrive\Bilder\ey\1552407106198.png">
-        </div>
+      <div class="grid-container bg-dark" id="canvas">
       </div>
     </div>
     <!-- Optional JavaScript -->
@@ -59,16 +69,23 @@
     <script>
 
       function getImages() {
-        fetch('http://localhost/images')
+        fetch('http://10.0.0.30:50000/images')
           .then(function (response) {
             return response.json();
           })
           .then(function (myJson) {
             console.log(JSON.stringify(myJson));
-            myJson.images.forEach(function(image) {
+            myJson.images.forEach(function (image) {
+
+              let link = $('<a>');
+              link.attr('href', "file://///10.0.0.30/images/" + image.file.fileName);
+              link.attr('class', 'grid-item d-0');
+              
               let img = $('<img>');
-              img.attr('src', "./images/" + image.file.fileName);
-              img.appendTo('#canvas');
+              img.attr('src', "file://///10.0.0.30/images/" + image.file.fileName);
+              img.appendTo(link);
+
+              link.appendTo('#canvas');
             });
           });
       }
