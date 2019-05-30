@@ -12,7 +12,7 @@
 
     <style>
       body {
-        background-color: rgb(0, 1, 10);
+        background-color: rgb(0, 0, 0);
       }
 
       #headercol {
@@ -20,17 +20,17 @@
       }
 
       img {
-        border: 1px solid rgba(0, 0, 0, 0.8);
         max-width: 200px !important;
         max-height: 200px !important;
       }
-      
+
       .grid-container {
         display: grid;
         grid-gap: 10px;
         grid-template-columns: auto auto auto auto auto auto auto;
+        padding: 10px;
       }
-      
+
       .grid-item {
         max-width: 200px !important;
         max-height: 200px !important;
@@ -45,13 +45,16 @@
       <div class="container d-flex float-left ml-5">
         <div class="row">
           <div id="headercol" class="col-xl rounded-bottom">
-            <h1 class="text-hide" style="background-image: url('./bot.png');width: 68px;height: 47px;">text</h1>
+            <h1 class="text-hide" style="background-image: url('./knerliimages.png');width: 432px;height: 74px;">text
+            </h1>
           </div>
         </div>
       </div>
     </div>
-    <div class="container.fluid overflow-hidden">
+    <div class="container.fluid overflow-hidden m-5 rounded justify-content-center" style="background-color: rgb(0, 28, 32);">
       <div class="grid-container" id="canvas">
+      </div>
+      <div class="container.fluid" id="pagination">
       </div>
     </div>
     <!-- Optional JavaScript -->
@@ -68,8 +71,8 @@
 
     <script>
 
-      function getImages() {
-        fetch('http://10.0.0.30:50000/images')
+      function getImages(page) {
+        fetch('http://localhost:80/images/?page=' + page)
           .then(function (response) {
             return response.json();
           })
@@ -78,19 +81,60 @@
             myJson.images.forEach(function (image) {
 
               let link = $('<a>');
-              link.attr('href', "file://///10.0.0.30/images/" + image.file.fileName);
+              link.attr('href', "file:///" + image.url);
               link.attr('class', 'grid-item d-0');
-              
+
               let img = $('<img>');
-              img.attr('src', "file://///10.0.0.30/images/" + image.file.fileName);
+              img.attr('src', "file:///" + image.url);
               img.appendTo(link);
 
               link.appendTo('#canvas');
             });
+
+            let nav = $('<nav>');
+            let ul = $('<ul>');
+            ul.attr('class', "pagination justify-content-center");
+
+            if (myJson.previous) {
+              let prev = $('<li>');
+              prev.attr('class', 'page-item')
+              let prevLink = $('<a>');
+              prevLink.attr('class', 'page-link');
+              prevLink.attr('href', '?page=' + myJson.previous);
+              prevLink.text('Previous');
+              prevLink.appendTo(ul);
+            }
+
+            if (myJson.next) {
+              let next = $('<li>');
+              next.attr('class', 'page-item')
+              let nextLink = $('<a>');
+              nextLink.attr('class', 'page-link');
+              nextLink.attr('href', '?page=' + myJson.next);
+              nextLink.text('Next');
+              nextLink.appendTo(ul);
+            }
+
+            ul.appendTo(nav)
+            nav.appendTo('#pagination')
           });
       }
 
-      window.onload = getImages()
+      function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+          hash = hashes[i].split('=');
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
+        }
+        return vars;
+      }
+
+      window.onload = function () {
+        let q = getUrlVars();
+        getImages(q.page);
+      }
 
     </script>
   </body>
