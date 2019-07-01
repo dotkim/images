@@ -39,7 +39,8 @@
         text-align: center;
       }
 
-      .page-item, .page-link {
+      .page-item,
+      .page-link {
         background-color: black;
         color: white;
         border: 0px;
@@ -51,7 +52,8 @@
       }
     </style>
 
-    <link rel="icon" href="favicon.png">
+    <base href="http://images.knerli.no" />
+    <link rel="icon" href="favicon.png" />
     <title>images</title>
   </head>
 
@@ -60,9 +62,16 @@
       <div class="container d-flex float-left ml-5">
         <div class="row">
           <div id="headercol" class="col-xl rounded-bottom">
-            <a href="?page=1">
+            <a href="">
               <h1 class="text-hide" style="background-image: url('knerliimages.png');width: 278px;height: 49px;"></h1>
             </a>
+          </div>
+          <div class="col-xs m-2">
+            <div class="btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-danger">
+                <input id="nsfwcheck" type="checkbox" autocomplete="off"> NSFW
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -86,14 +95,22 @@
       crossorigin="anonymous"></script>
 
     <script>
+      function toggleState() {
+        let nsfw = document.getElementById("nsfwcheck");
+        if (nsfw.checked == false) {
+          return 0;
+        }
+        else {
+          return 1;
+        }
+      }
 
-      function getImages(page) {
-        fetch('http://165.227.149.145/images/?page=' + page)
+      function getImages(page, filter) {
+        fetch('http://knerli.no/images/?page=' + page + '&filter=' + filter)
           .then(function (response) {
             return response.json();
           })
           .then(function (myJson) {
-            console.log(JSON.stringify(myJson));
             myJson.images.forEach(function (image) {
 
               let dev = $('<div>');
@@ -103,7 +120,7 @@
               link.attr('href', image.url);
 
               let img = $('<img>');
-              img.attr('src', image.url);
+              img.attr('src', image.thumbnail);
               img.appendTo(link);
               link.appendTo(dev);
 
@@ -152,7 +169,36 @@
 
       window.onload = function () {
         let q = getUrlVars();
-        getImages(q.page);
+        let filter = toggleState();
+        let nsfwCheck = document.getElementById("nsfwcheck");
+
+        if (!localStorage.nsfwFilter) {
+          localStorage.nsfwFilter = filter;
+        }
+
+        if (localStorage.nsfwFilter) {
+          nsfwCheck.checked = localStorage.nsfwFilter;
+        }
+        
+        if (filter == '1') {
+          nsfwCheck.checked = true;
+          localStorage.nsfwFilter = filter;
+        }
+        else {
+          nsfwCheck.checked = false;
+          localStorage.nsfwFilter = filter;
+        }
+
+        if (!q.page) {
+          q.page = 1
+        }
+
+        getImages(q.page, filter);
+
+        nsfwCheck.on('change', function () {
+          localStorage.nsfwFilter = nsfwCheck.checked;
+          console.log('check changed:', nsfwCheck.checked);
+        });
       }
 
     </script>
