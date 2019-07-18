@@ -107,13 +107,13 @@
 
       function getImages(page, filter) {
         fetch('http://knerli.no/images/?page=' + page + '&filter=' + filter)
-          .then(function (response) {
+          .then((response) => {
             return response.json();
           })
-          .then(function (myJson) {
+          .then((myJson) => {
+            let dev = $('<div>');
+            
             myJson.images.forEach(function (image) {
-
-              let dev = $('<div>');
               dev.attr('class', 'grid-item');
 
               let link = $('<a>');
@@ -123,18 +123,22 @@
               img.attr('src', image.thumbnail);
               img.appendTo(link);
               link.appendTo(dev);
-
-              dev.appendTo('#canvas');
             });
+            
+            dev.appendTo('#canvas');
 
             let nav = $('<nav>');
             let ul = $('<ul>');
+
             ul.attr('class', "pagination justify-content-center");
 
             if (myJson.previous) {
               let prev = $('<li>');
+
               prev.attr('class', 'page-item')
+
               let prevLink = $('<a>');
+
               prevLink.attr('class', 'page-link');
               prevLink.attr('href', '?page=' + myJson.previous);
               prevLink.text('Previous');
@@ -143,8 +147,11 @@
 
             if (myJson.next) {
               let next = $('<li>');
+
               next.attr('class', 'page-item')
+
               let nextLink = $('<a>');
+
               nextLink.attr('class', 'page-link');
               nextLink.attr('href', '?page=' + myJson.next);
               nextLink.text('Next');
@@ -170,35 +177,12 @@
       window.onload = function () {
         let q = getUrlVars();
         let filter = toggleState();
-        let nsfwCheck = document.getElementById("nsfwcheck");
-
-        if (!localStorage.nsfwFilter) {
-          localStorage.nsfwFilter = filter;
-        }
-
-        if (localStorage.nsfwFilter) {
-          nsfwCheck.checked = localStorage.nsfwFilter;
-        }
-        
-        if (filter == '1') {
-          nsfwCheck.checked = true;
-          localStorage.nsfwFilter = filter;
-        }
-        else {
-          nsfwCheck.checked = false;
-          localStorage.nsfwFilter = filter;
-        }
 
         if (!q.page) {
           q.page = 1
         }
 
         getImages(q.page, filter);
-
-        nsfwCheck.on('change', function () {
-          localStorage.nsfwFilter = nsfwCheck.checked;
-          console.log('check changed:', nsfwCheck.checked);
-        });
       }
 
     </script>
