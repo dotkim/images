@@ -192,13 +192,12 @@
 
       window.onload = function () {
         let q = getUrlVars();
-        let filter = toggleState();
 
         if (!q.page) {
           q.page = 1
         }
 
-        getImages(q.page, filter);
+        getImages(q.page);
       }
 
     </script>
