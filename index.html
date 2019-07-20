@@ -105,8 +105,8 @@
         }
       }
 
-      function getImages(page, filter) {
-        fetch('http://knerli.no/images/?page=' + page + '&filter=' + '0')
+      function getImages(page) {
+        fetch('http://knerli.no/images/?page=' + page)
           .then((response) => {
             return response.json();
           })
