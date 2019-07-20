@@ -132,6 +132,14 @@
 
             ul.attr('class', "pagination justify-content-center");
 
+            let first = $('<li>');
+            first.attr('class', 'page-item');
+            let firstLink = $('<a>');
+            firstLink.attr('class', 'page-link');
+            firstLink.attr('href', '?page=1');
+            firstLink.text('First');
+            firstLink.appendTo(ul);
+            
             if (myJson.previous) {
               let prev = $('<li>');
 
@@ -157,6 +165,14 @@
               nextLink.text('Next');
               nextLink.appendTo(ul);
             }
+
+            let last = $('<li>');
+            last.attr('class', 'page-item');
+            let lastLink = $('<a>');
+            lastLink.attr('class', 'page-link');
+            lastLink.attr('href', '?page=' + myJson.number_of_pages);
+            lastLink.text('Last');
+            lastLink.appendTo(ul);
 
             ul.appendTo(nav)
             nav.appendTo('#pagination')
