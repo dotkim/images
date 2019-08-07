@@ -110,73 +110,68 @@
           .then((response) => {
             return response.json();
           })
-          .then((myJson) => {
-            
-            myJson.images.forEach(function (image) {
-              let dev = $('<div>');
-              dev.attr('class', 'grid-item');
+          .then((imageObj) => {
+            let canvas = document.getElementById('canvas');
 
-              let link = $('<a>');
-              link.attr('href', image.url);
+            //Loop over the images and create the grid elements
+            imageObj.images.forEach(function (image) {
+              let div = document.createElement('div');
+              div.setAttribute('class', 'grid-item');
 
-              let img = $('<img>');
-              img.attr('src', image.thumbnail);
-              img.appendTo(link);
-              link.appendTo(dev);
-              dev.appendTo('#canvas');
+              let link = document.createElement('a');
+              link.setAttribute('href', image.url);
+              
+              let img = document.createElement('img');
+              img.setAttribute('src', image.thumbnail);
+
+              //Append all the elements to the canvas
+              link.append(img);
+              div.append(link);
+              canvas.append(div);
             });
             
-            document.getElementById('canvas').removeAttribute('style');
+            //Remove the style attrib, this will make the canvas visible
+            //Currently not working as intended.
+            canvas.removeAttribute('style');
 
-            let nav = $('<nav>');
-            let ul = $('<ul>');
+            let pagination = document.getElementById('pagination');
+            let nav = document.createElement('nav');
+            let ul = document.createElement('ul');
 
-            ul.attr('class', "pagination justify-content-center");
+            ul.setAttribute('class', 'pagination justify-content-center');
 
-            let first = $('<li>');
-            first.attr('class', 'page-item');
-            let firstLink = $('<a>');
-            firstLink.attr('class', 'page-link');
-            firstLink.attr('href', '?page=1');
-            firstLink.text('First');
-            firstLink.appendTo(ul);
-            
-            if (myJson.previous) {
-              let prev = $('<li>');
+            let firstLink = document.createElement('a');
+            firstLink.setAttribute('class', 'page-link');
+            firstLink.setAttribute('href', '?page=1');
+            firstLink.textContent = 'First';
+            ul.append(firstLink);
 
-              prev.attr('class', 'page-item')
-
-              let prevLink = $('<a>');
-
-              prevLink.attr('class', 'page-link');
-              prevLink.attr('href', '?page=' + myJson.previous);
-              prevLink.text('Previous');
-              prevLink.appendTo(ul);
+            if (imageObj.previous) {
+              let prevLink = document.createElement('a');
+              prevLink.setAttribute('class', 'page-link');
+              prevLink.setAttribute('href', '?page=' + imageObj.previous);
+              prevLink.textContent = 'Previous';
+              ul.append(prevLink);
             }
 
-            if (myJson.next) {
-              let next = $('<li>');
-
-              next.attr('class', 'page-item')
-
-              let nextLink = $('<a>');
-
-              nextLink.attr('class', 'page-link');
-              nextLink.attr('href', '?page=' + myJson.next);
-              nextLink.text('Next');
-              nextLink.appendTo(ul);
+            if (imageObj.next) {
+              let nextLink = document.createElement('a');
+              nextLink.setAttribute('class', 'page-link');
+              nextLink.setAttribute('href', '?page=' + imageObj.next);
+              nextLink.textContent = 'Next';
+              ul.append(nextLink);
             }
 
-            let last = $('<li>');
-            last.attr('class', 'page-item');
-            let lastLink = $('<a>');
-            lastLink.attr('class', 'page-link');
-            lastLink.attr('href', '?page=' + myJson.number_of_pages);
-            lastLink.text('Last');
-            lastLink.appendTo(ul);
+            let lastLink = document.createElement('a');
+            lastLink.setAttribute('class', 'page-link');
+            lastLink.setAttribute('href', '?page=' + imageObj.number_of_pages);
+            lastLink.textContent = 'Last';
+            ul.append(lastLink);
 
-            ul.appendTo(nav)
-            nav.appendTo('#pagination')
+            console.log(ul);
+            console.log(nav);
+            nav.append(ul);
+            pagination.append(nav);
           });
       }
 
