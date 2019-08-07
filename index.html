@@ -10,49 +10,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <style>
-      body {
-        background-color: rgb(0, 0, 0);
-      }
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="style.css">
 
-      #headercol {
-        background-color: #1f5463;
-      }
-
-      img {
-        max-width: 200px !important;
-        max-height: 200px !important;
-      }
-
-      a:focus {
-        outline: 0;
-      }
-
-      .grid-container {
-        display: grid;
-        grid-gap: 10px;
-        grid-template-columns: auto auto auto auto auto auto auto;
-        padding: 10px;
-      }
-
-      .grid-item {
-        text-align: center;
-      }
-
-      .page-item,
-      .page-link {
-        background-color: black;
-        color: white;
-        border: 0px;
-      }
-
-      a:hover {
-        color: black !important;
-        background-color: white !important;
-      }
-    </style>
-
-    <base href="http://images.knerli.no" />
+    <!-- favicon & title -->
     <link rel="icon" href="favicon.png" />
     <title>images</title>
   </head>
@@ -62,13 +23,13 @@
       <div class="container d-flex float-left ml-5">
         <div class="row">
           <div id="headercol" class="col-xl rounded-bottom">
-            <a href="">
+            <a href="index.html">
               <h1 class="text-hide" style="background-image: url('knerliimages.png');width: 278px;height: 49px;"></h1>
             </a>
           </div>
           <div class="col-xs m-2">
             <div class="btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-danger">
+              <label>
                 <input id="nsfwcheck" type="checkbox" autocomplete="off"> NSFW
               </label>
             </div>
@@ -82,121 +43,7 @@
       <div class="container.fluid" id="pagination">
       </div>
     </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"></script>
-
-    <script>
-      function toggleState() {
-        let nsfw = document.getElementById("nsfwcheck");
-        if (nsfw.checked == false) {
-          return 0;
-        }
-        else {
-          return 1;
-        }
-      }
-
-      function getImages(page) {
-        fetch('http://images.knerli.no/images/?page=' + page)
-          .then((response) => {
-            return response.json();
-          })
-          .then((imageObj) => {
-            let canvas = document.getElementById('canvas');
-
-            //Loop over the images and create the grid elements
-            imageObj.images.forEach(function (image) {
-              let div = document.createElement('div');
-              div.setAttribute('class', 'grid-item');
-
-              let link = document.createElement('a');
-              link.setAttribute('href', image.url);
-              
-              let img = document.createElement('img');
-              img.setAttribute('src', image.thumbnail);
-
-              //Append all the elements to the canvas
-              link.append(img);
-              div.append(link);
-              canvas.append(div);
-            });
-            
-            //Remove the style attrib, this will make the canvas visible
-            //Currently not working as intended.
-            canvas.removeAttribute('style');
-
-            let pagination = document.getElementById('pagination');
-            let nav = document.createElement('nav');
-            let ul = document.createElement('ul');
-
-            ul.setAttribute('class', 'pagination justify-content-center');
-
-            let firstLink = document.createElement('a');
-            firstLink.setAttribute('class', 'page-link');
-            firstLink.setAttribute('href', '?page=1');
-            firstLink.textContent = 'First';
-            ul.append(firstLink);
-
-            if (imageObj.previous) {
-              let prevLink = document.createElement('a');
-              prevLink.setAttribute('class', 'page-link');
-              prevLink.setAttribute('href', '?page=' + imageObj.previous);
-              prevLink.textContent = 'Previous';
-              ul.append(prevLink);
-            }
-
-            if (imageObj.next) {
-              let nextLink = document.createElement('a');
-              nextLink.setAttribute('class', 'page-link');
-              nextLink.setAttribute('href', '?page=' + imageObj.next);
-              nextLink.textContent = 'Next';
-              ul.append(nextLink);
-            }
-
-            let lastLink = document.createElement('a');
-            lastLink.setAttribute('class', 'page-link');
-            lastLink.setAttribute('href', '?page=' + imageObj.number_of_pages);
-            lastLink.textContent = 'Last';
-            ul.append(lastLink);
-
-            console.log(ul);
-            console.log(nav);
-            nav.append(ul);
-            pagination.append(nav);
-          });
-      }
-
-      function getUrlVars() {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for (var i = 0; i < hashes.length; i++) {
-          hash = hashes[i].split('=');
-          vars.push(hash[0]);
-          vars[hash[0]] = hash[1];
-        }
-        return vars;
-      }
-
-      window.onload = function () {
-        let q = getUrlVars();
-
-        if (!q.page) {
-          q.page = 1
-        }
-
-        getImages(q.page);
-      }
-
-    </script>
+    <script type="text/javascript" src="script.js"></script>
   </body>
 
 </html>
