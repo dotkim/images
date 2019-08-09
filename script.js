@@ -108,8 +108,6 @@ function getImages(page, filter) {
       let lastLink = paginationElement(imageObj.number_of_pages, 'Last');
       ul.append(lastLink);
 
-      console.log(ul);
-      console.log(nav);
       nav.append(ul);
       pagination.append(nav);
     });
