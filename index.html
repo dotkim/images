@@ -2,48 +2,34 @@
 <html lang="en">
 
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Site CSS -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- favicon & title -->
     <link rel="icon" href="favicon.png" />
     <title>images</title>
   </head>
 
   <body>
     <div class="container.fluid overflow-hidden">
-      <div class="container d-flex float-left ml-5">
-        <div class="row">
-          <div id="headercol" class="col-xl rounded-bottom">
-            <a href="index.html">
-              <h1 class="text-hide" style="background-image: url('knerliimages.png');width: 278px;height: 49px;"></h1>
-            </a>
-          </div>
-          <div class="col-xs m-2">
-            <div class="btn-group-toggle" data-toggle="buttons">
-              <label>
-                <input id="nsfwcheck" type="checkbox" autocomplete="off"> NSFW
-              </label>
-            </div>
-          </div>
+      <div class="container d-flex justify-content-center">
+        <div id="headercol" class="rounded-bottom">
+          <a href="?page=1">
+            <h1 class="text-hide" style="background-image: url('knerliimages.png');width: 278px;height: 49px;"></h1>
+          </a>
         </div>
       </div>
-    </div>
-    <div class="container.fluid overflow-hidden m-1 rounded" style="background-color: rgb(0, 28, 32);">
-      <div class="grid-container" id="canvas" style="display: none;">
+      <div class="d-flex justify-content-center">
+        <button id="filter" type="button" autocomplete="off" style="width: 278px;" onclick="buttonClick()"/>
       </div>
-      <div class="container.fluid" id="pagination">
+      <div class="container.fluid overflow-hidden m-1 rounded" style="background-color: rgb(0, 28, 32);">
+        <div class="row d-flex justify-content-center" id="canvas" style="display: none;">
+        </div>
+        <div class="container.fluid" id="pagination">
+        </div>
       </div>
-    </div>
-    <script type="text/javascript" src="script.js"></script>
+      <script type="text/javascript" src="script.js"></script>
   </body>
 
 </html>
